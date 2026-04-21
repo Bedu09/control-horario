@@ -1,0 +1,148 @@
+.sidebar {
+  width: 260px;
+  background-color: var(--bg-color); /* The design has a slightly off-white bg for the whole screen, and white for main sections. Wait, the left sidebar in the design is actually extremely light gray or white. Let's make it the same as body, and main app container white? No, the background is gray, the main panel could just be floating. Let's look at the design: Left panel is slightly different from the center. Actually, the entire bg is very light gradient or white. Let's use #F8F9FA. */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.brand-logo {
+  color: var(--primary-blue);
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--primary-blue);
+  letter-spacing: -0.5px;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.profile-avatar-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.profile-role {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: auto; /* pushes everything below it to the bottom */
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--border-radius-md);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: rgba(58, 54, 219, 0.05);
+  color: var(--primary-blue);
+}
+
+.nav-item.active {
+  background-color: white;
+  color: var(--primary-blue);
+  box-shadow: var(--shadow-sm);
+}
+
+.pro-plan-card {
+  background-color: rgba(58, 54, 219, 0.05);
+  border-radius: var(--border-radius-lg);
+  padding: 24px 20px;
+  margin-bottom: 24px;
+}
+
+.pro-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.pro-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.pro-button {
+  width: 100%;
+  background-color: var(--primary-blue);
+  color: white;
+  border-radius: var(--border-radius-full);
+  padding: 10px 0;
+  font-weight: 600;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.pro-button:hover {
+  background-color: var(--primary-blue-hover);
+}
+
+.bottom-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bottom-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.bottom-link:hover {
+  color: var(--text-primary);
+}
