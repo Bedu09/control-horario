@@ -25,6 +25,8 @@ export const translations = {
     projectSubtitle: 'Design Strategy & Wireframing',
     taskProgress: 'TASK PROGRESS',
     addNote: 'Add Note',
+    addNotePrompt: 'Enter or edit note for this record:',
+    viewNoteTitle: 'View note',
 
     // Stats
     dailyProgress: 'Daily Progress',
@@ -73,6 +75,8 @@ export const translations = {
     projectSubtitle: 'Estrategia de Diseño y Wireframing',
     taskProgress: 'PROGRESO',
     addNote: 'Agregar Nota',
+    addNotePrompt: 'Ingresa o edita la nota para este registro:',
+    viewNoteTitle: 'Ver nota',
 
     // Stats
     dailyProgress: 'Progreso Diario',

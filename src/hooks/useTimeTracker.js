@@ -70,7 +70,7 @@ export function useTimeTracker() {
     setHistoricalEvents(prev => [...prev, { type, time: new Date().toISOString() }]);
   };
 
-  const stopTimer = (recordingDate, hourlyRate) => {
+  const stopTimer = (recordingDate, hourlyRate, note) => {
     setStatus('idle');
     setStartTime(null);
     
@@ -104,7 +104,8 @@ export function useTimeTracker() {
       date: recordingDate || finalTime.substring(0, 10),
       totalTime: `${hoursStr}h ${minutesStr}m`,
       pauseDuration: pauseString,
-      earnings: earned
+      earnings: earned,
+      note: note || ''
     };
 
     const newHistory = [...dailyHistory, newRecord];
@@ -121,7 +122,7 @@ export function useTimeTracker() {
     setElapsedSeconds(0);
   };
 
-  const addManualRecord = (recordingDate, manualHours, manualMinutes, hourlyRate) => {
+  const addManualRecord = (recordingDate, manualHours, manualMinutes, hourlyRate, note) => {
     const totalDecimalHours = manualHours + (manualMinutes / 60);
     const earned = (totalDecimalHours * (hourlyRate || 0)).toFixed(2);
 
@@ -129,7 +130,8 @@ export function useTimeTracker() {
       date: recordingDate || new Date().toISOString().substring(0, 10),
       totalTime: `${manualHours}h ${manualMinutes}m`,
       pauseDuration: 'No hubo (Carga Manual)',
-      earnings: earned
+      earnings: earned,
+      note: note || ''
     };
 
     const newHistory = [...dailyHistory, newRecord];
@@ -142,12 +144,13 @@ export function useTimeTracker() {
     setHistoricalBalance(newBalance);
   };
 
-  const addNonWorkingDay = (recordingDate) => {
+  const addNonWorkingDay = (recordingDate, note) => {
     const newRecord = {
       date: recordingDate || new Date().toISOString().substring(0, 10),
       totalTime: 'No se trabaja',
       pauseDuration: '-',
-      earnings: '0.00'
+      earnings: '0.00',
+      note: note || ''
     };
 
     const newHistory = [...dailyHistory, newRecord];
@@ -175,6 +178,15 @@ export function useTimeTracker() {
     const newHistory = dailyHistory.filter((_, i) => i !== index);
     setDailyHistory(newHistory);
     localStorage.setItem('dailyHistory', JSON.stringify(newHistory));
+  };
+
+  const editRecordNote = (index, newNote) => {
+    const newHistory = [...dailyHistory];
+    if (newHistory[index]) {
+      newHistory[index].note = newNote;
+      setDailyHistory(newHistory);
+      localStorage.setItem('dailyHistory', JSON.stringify(newHistory));
+    }
   };
 
   const resetTimer = () => {
@@ -211,6 +223,7 @@ export function useTimeTracker() {
     addManualRecord,
     addNonWorkingDay,
     deleteRecord,
+    editRecordNote,
     resetTimer
   };
 }

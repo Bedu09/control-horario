@@ -1,4 +1,4 @@
-import { Play, Square, Pause, Activity } from 'lucide-react';
+import { Play, Square, Pause, Activity, FileText, Pencil } from 'lucide-react';
 import { useTimeTracker } from '../hooks/useTimeTracker';
 import './Dashboard.css';
 import { useState, useEffect } from 'react';
@@ -7,24 +7,34 @@ import { es as esLocale, enUS } from 'date-fns/locale';
 import { useLanguage } from '../context/LanguageContext';
 
 const Dashboard = () => {
-  const { status, formattedTime, elapsedSeconds, startTimer, pauseTimer, stopTimer, dailyHistory, historicalBalance, setHistoricalBalance, addManualRecord, addNonWorkingDay, deleteRecord } = useTimeTracker();
+  const { status, formattedTime, elapsedSeconds, startTimer, pauseTimer, stopTimer, dailyHistory, historicalBalance, setHistoricalBalance, addManualRecord, addNonWorkingDay, deleteRecord, editRecordNote } = useTimeTracker();
   const { t, lang, toggleLang } = useLanguage();
 
   const [manualHours, setManualHours] = useState('');
   const [manualMinutes, setManualMinutes] = useState('');
+  const [sessionNote, setSessionNote] = useState('');
+
+  const handleAddNote = () => {
+    const text = window.prompt(t.addNotePrompt, sessionNote);
+    if (text !== null) {
+      setSessionNote(text);
+    }
+  };
 
   const handleManualSave = () => {
     const h = parseInt(manualHours) || 0;
     const m = parseInt(manualMinutes) || 0;
     if (h === 0 && m === 0) return;
 
-    addManualRecord(selectedDate, h, m, hourlyRate);
+    const note = window.prompt(t.addNotePrompt, '');
+    addManualRecord(selectedDate, h, m, hourlyRate, note !== null ? note : '');
     setManualHours('');
     setManualMinutes('');
   };
 
   const handleNonWorkingDay = () => {
-    addNonWorkingDay(selectedDate);
+    const note = window.prompt(t.addNotePrompt, '');
+    addNonWorkingDay(selectedDate, note !== null ? note : '');
   };
   
   // Rate config
@@ -175,7 +185,10 @@ const Dashboard = () => {
                 <button className="control-btn pause-btn" onClick={() => pauseTimer('pausa_break')}>
                   <Pause size={24} />
                 </button>
-                <button className="control-btn stop-btn" onClick={() => stopTimer(selectedDate, hourlyRate)}>
+                <button className="control-btn stop-btn" onClick={() => {
+                  stopTimer(selectedDate, hourlyRate, sessionNote);
+                  setSessionNote('');
+                }}>
                   <Square size={24} />
                 </button>
               </>
@@ -184,7 +197,9 @@ const Dashboard = () => {
                 <Play size={24} fill="currentColor" />
               </button>
             )}
-            <button className="add-note-btn">{t.addNote}</button>
+            <button className="add-note-btn" onClick={handleAddNote}>
+              {t.addNote} {sessionNote ? '✓' : ''}
+            </button>
           </div>
         </div>
         
@@ -301,7 +316,30 @@ const Dashboard = () => {
                   <span className="activity-company" style={{fontSize: '12px', color: 'var(--primary-blue)'}}>{formatRecordDate(record.date)}</span>
                   <button onClick={() => deleteRecord(record.originalIndex)} style={{background: 'transparent', border: 'none', color: 'var(--accent-red)', cursor: 'pointer', padding: '0 4px', fontSize: '14px', lineHeight:'1'}} title={t.deleteTitle}>✕</button>
                 </div>
-                <span className="activity-title" style={{marginTop:'4px', display:'block'}}>{t.activityLabel(record)}</span>
+                <div style={{marginTop:'4px', lineHeight: '1.5', color:'var(--text-primary)', fontSize:'14px', fontWeight:'600'}}>
+                  <span style={{marginRight: '6px'}}>{t.activityLabel(record)}</span>
+                  {record.note && (
+                    <button 
+                      onClick={() => window.alert(record.note)}
+                      style={{background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--accent-yellow)', display: 'inline-flex', alignItems: 'center', padding: 0, verticalAlign: 'middle', marginRight: '6px'}}
+                      title={t.viewNoteTitle}
+                    >
+                      <FileText size={16} />
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => {
+                      const newNote = window.prompt(t.addNotePrompt, record.note || '');
+                      if (newNote !== null) {
+                        editRecordNote(record.originalIndex, newNote);
+                      }
+                    }}
+                    style={{background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', display: 'inline-flex', alignItems: 'center', padding: 0, verticalAlign: 'middle'}}
+                    title="Editar nota"
+                  >
+                    <Pencil size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           )) : (
